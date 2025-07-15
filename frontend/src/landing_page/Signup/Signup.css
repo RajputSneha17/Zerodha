@@ -1,0 +1,11 @@
+.custom-input-group:focus-within {
+  border: 1px solid black;
+  border-radius: 4px; /* optional */
+}
+
+/* Remove default blue shadow and outline */
+.custom-input-group .form-control:focus {
+  box-shadow: none;
+  outline: none;
+  border: none;
+}
