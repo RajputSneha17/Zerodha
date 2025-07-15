@@ -29,13 +29,13 @@ const teamMembers = [
 
 const Universe = () => {
   return (
-    <div className="container  text-center p-5">
-      <h5 className=" p-5">
+    <div className="container text-center p-5">
+      <h5 className="p-5">
         Want to know more about our technology stack? Check out the Zerodha.tech
         blog.
       </h5>
-      <h1 className=" pt-5">The Zerodha Universe</h1>
-      <p className=" p-3 mb-5">
+      <h1 className="pt-5">The Zerodha Universe</h1>
+      <p className="p-3 mb-5">
         Extend your trading and investment experience even further with our
         partner platforms
       </p>
@@ -47,14 +47,17 @@ const Universe = () => {
               <div className="row justify-content-center mb-5" key={index}>
                 {group.map((person, i) => (
                   <React.Fragment key={i}>
-                    {i > 0 && <div className="col-1"></div>}
-                    <div className="col-3 text-center">
+                    {/* Space between cards only on md and up */}
+                    {i > 0 && (
+                      <div className="d-none d-md-block col-md-1"></div>
+                    )}
+                    <div className="col-12 col-md-3 mb-4 mb-md-0 text-center">
                       <img
-                        style={{ width: "200px" }}
+                        style={{ width: "100%", maxWidth: "200px" }}
                         src={person.image}
                         alt={person.name}
                       />
-                      <p className="text-center" style={{fontSize: "10px"}}>{person.text}</p>
+                      <p style={{ fontSize: "10px" }}>{person.text}</p>
                     </div>
                   </React.Fragment>
                 ))}
@@ -64,7 +67,9 @@ const Universe = () => {
           return null;
         })}
       </div>
-      <button className="btn btn-primary fs-5 px-5 p-2">Sign up for free</button>
+      <button className="btn btn-primary fs-5 px-5 p-2">
+        Sign up for free
+      </button>
     </div>
   );
 };
