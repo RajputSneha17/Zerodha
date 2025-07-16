@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import GeneralContext from "./GeneralContext";
+
 import { Tooltip, Grow } from "@mui/material";
-import { watchlist } from "../Data/data";
 import {
   BarChartOutlined,
   KeyboardArrowDown,
@@ -8,9 +12,27 @@ import {
   MoreHoriz,
 } from "@mui/icons-material";
 
+import axios from "axios";
+
 const WatchList = () => {
+  const [watchlist, setWatchlistData] = useState([]);
+
+  useEffect(() => {
+  const fetchWatchlistData = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/watchlist");
+      setWatchlistData(response.data);
+    } catch (error) {
+      console.log("Failed to fetch watchlist:", error);
+    }
+  };
+
+  fetchWatchlistData();
+}, []); 
+
   return (
     <div className="watchlist-container">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="search-container">
         <input
           type="text"
@@ -23,9 +45,9 @@ const WatchList = () => {
       </div>
 
       <ul className="list">
-        {watchlist.map((item, index) => (
-          <WatchListItem item={item} key={index} />
-        ))}
+        {watchlist.map((stock, index) => {
+          return <WatchListItem stock={stock} key={index} />;
+        })}
       </ul>
     </div>
   );
@@ -33,58 +55,77 @@ const WatchList = () => {
 
 export default WatchList;
 
-const WatchListItem = ({ item }) => {
-  const [showAction, setShowAction] = useState(false);
-  const handleEnter = (e) => {
-    setShowAction(true);
-  };
-  const handleExit = (e) => {
-    setShowAction(false);
-  };
+const WatchListItem = ({ stock }) => {
+  const [showWatchlistActions, setShowWatchlistActions] = useState(false);
+
+  const handleMouseEnter = () => setShowWatchlistActions(true);
+  const handleMouseLeave = () => setShowWatchlistActions(false);
 
   return (
-    <li onMouseEnter={handleEnter} onMouseLeave={handleExit}>
+    <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="item">
-        <p className={item.isDown ? "down" : "up"}>{item.name}</p>
+        <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
         <div className="itemInfo">
-          <span className="percent">{item.percent}</span>
-          {item.isDown ? (
+          <span className="percent">{stock.percent}</span>
+          {stock.isDown ? (
             <KeyboardArrowDown className="down" />
           ) : (
-            <KeyboardArrowUp className="up" />
+            <KeyboardArrowUp className="down" />
           )}
-          <span className="percent">{item.price}</span>
+          <span className="price">{stock.price}</span>
         </div>
       </div>
-      {showAction && <WatchListActions uid={item.name} />}
+
+      {showWatchlistActions && (
+        <WatchListActions uid={stock.name} id={stock._id} />
+      )}
     </li>
   );
 };
 
-const WatchListActions = ({ uid }) => {
+const WatchListActions = ({ uid, id }) => {
+  const generalContext = useContext(GeneralContext);
+
+  const handleBuyClick = () => {
+    generalContext.openBuyWindow(uid);
+  };
+
+  const handleSellClick = async () => {
+    try {
+      console.log(id);
+      const response = await axios.patch("http://localhost:8000/updateMode", {
+        id: id,
+        mode: "Sell",
+      });
+
+      console.log(response.data);
+      toast.success("Your stock has been sold ✅");
+    } catch (error) {
+      console.error(error);
+      toast.error("No matching order found");
+    }
+  };
+
   return (
     <span className="actions">
       <Tooltip title="Buy (B)" placement="top" arrow TransitionComponent={Grow}>
-        <button className="buy">Buy</button>
+        <button className="buy" onClick={handleBuyClick}>
+          Buy
+        </button>
       </Tooltip>
-      <Tooltip
-        title="Sell (S)"
-        placement="top"
-        arrow
-        TransitionComponent={Grow}
-      >
-        <button className="sell">Sell</button>
+
+      <Tooltip title="Sell (S)" placement="top" arrow TransitionComponent={Grow}>
+        <button className="sell" onClick={handleSellClick}>
+          Sell
+        </button>
       </Tooltip>
-      <Tooltip
-        title="Analytics (A)"
-        placement="top"
-        arrow
-        TransitionComponent={Grow}
-      >
+
+      <Tooltip title="Analytics (A)" placement="top" arrow TransitionComponent={Grow}>
         <button className="action">
           <BarChartOutlined className="icon" />
         </button>
       </Tooltip>
+
       <Tooltip title="More" placement="top" arrow TransitionComponent={Grow}>
         <button className="action">
           <MoreHoriz className="icon" />

@@ -1,7 +1,20 @@
-import React from "react";
-import { positions } from "../Data/data";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Positions = () => {
+  const [positions, setPositions] = useState([]);
+
+  useEffect(() => {
+    try {
+      const fetchPositions = async () => {
+        const allPositions = await axios.get("http://localhost:8000/position");
+        setPositions(allPositions.data);
+      };
+      fetchPositions();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return (
     <>
       <h3 className="title">Positions ({positions.length})</h3>
@@ -22,9 +35,14 @@ const Positions = () => {
           <tbody>
             {positions.map((stock, index) => {
               const curValue = stock.price * stock.qty;
-              const isProfit = curValue - stock.avg * stock.qty >= 0.0;
-              const profClass = isProfit ? "profit" : "loss";
-              const dayClass = stock.isLoss ? "loss" : "profit";
+              const investedValue = stock.avg * stock.qty;
+              const profitLoss = curValue - investedValue;
+
+              const changePercent =
+                ((stock.price - stock.avg) / stock.avg) * 100;
+
+              const profClass = profitLoss >= 0 ? "profit" : "loss";
+              const chgClass = changePercent >= 0 ? "profit" : "loss";
 
               return (
                 <tr key={index}>
@@ -33,10 +51,8 @@ const Positions = () => {
                   <td>{stock.qty}</td>
                   <td>{stock.avg.toFixed(2)}</td>
                   <td>{stock.price.toFixed(2)}</td>
-                  <td className={profClass}>
-                    {(curValue - stock.avg * stock.qty).toFixed(2)}
-                  </td>
-                  <td className={dayClass}>{stock.day}</td>
+                  <td className={profClass}>{profitLoss.toFixed(2)}</td>
+                  <td className={chgClass}>{changePercent.toFixed(2)}%</td>
                 </tr>
               );
             })}
