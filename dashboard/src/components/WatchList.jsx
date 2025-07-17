@@ -1,8 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import GeneralContext from "./GeneralContext";
+import AddOrder from "./AddOrder";
 
 import { Tooltip, Grow } from "@mui/material";
 import {
@@ -18,21 +15,20 @@ const WatchList = () => {
   const [watchlist, setWatchlistData] = useState([]);
 
   useEffect(() => {
-  const fetchWatchlistData = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/watchlist");
-      setWatchlistData(response.data);
-    } catch (error) {
-      console.log("Failed to fetch watchlist:", error);
-    }
-  };
+    const fetchWatchlistData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/watchlist");
+        setWatchlistData(response.data);
+      } catch (error) {
+        console.log("Failed to fetch watchlist:", error);
+      }
+    };
 
-  fetchWatchlistData();
-}, []); 
+    fetchWatchlistData();
+  }, []);
 
   return (
     <div className="watchlist-container">
-      <ToastContainer position="top-right" autoClose={3000} />
       <div className="search-container">
         <input
           type="text"
@@ -57,80 +53,69 @@ export default WatchList;
 
 const WatchListItem = ({ stock }) => {
   const [showWatchlistActions, setShowWatchlistActions] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleMouseEnter = () => setShowWatchlistActions(true);
   const handleMouseLeave = () => setShowWatchlistActions(false);
 
+  const handleBuy = () => {
+    setShowPopup(true);
+  };
+
   return (
-    <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <div className="item">
-        <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
-        <div className="itemInfo">
-          <span className="percent">{stock.percent}</span>
-          {stock.isDown ? (
-            <KeyboardArrowDown className="down" />
-          ) : (
-            <KeyboardArrowUp className="down" />
-          )}
-          <span className="price">{stock.price}</span>
+    <>
+      <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div className="item">
+          <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
+          <div className="itemInfo">
+            <span className="percent">{stock.percent}</span>
+            {stock.isDown ? (
+              <KeyboardArrowDown className="down" />
+            ) : (
+              <KeyboardArrowUp className="down" />
+            )}
+            <span className="price">{stock.price}</span>
+          </div>
         </div>
-      </div>
 
-      {showWatchlistActions && (
-        <WatchListActions uid={stock.name} id={stock._id} />
-      )}
-    </li>
-  );
-};
+        {showWatchlistActions && (
+          <span className="actions">
+            <Tooltip
+              title="Buy (B)"
+              placement="top"
+              arrow
+              TransitionComponent={Grow}
+            >
+              <button className="buy" onClick={handleBuy}>
+                Buy
+              </button>
+            </Tooltip>
 
-const WatchListActions = ({ uid, id }) => {
-  const generalContext = useContext(GeneralContext);
+            <Tooltip
+              title="Analytics (A)"
+              placement="top"
+              arrow
+              TransitionComponent={Grow}
+            >
+              <button className="action">
+                <BarChartOutlined className="icon" />
+              </button>
+            </Tooltip>
 
-  const handleBuyClick = () => {
-    generalContext.openBuyWindow(uid);
-  };
-
-  const handleSellClick = async () => {
-    try {
-      console.log(id);
-      const response = await axios.patch("http://localhost:8000/updateMode", {
-        id: id,
-        mode: "Sell",
-      });
-
-      console.log(response.data);
-      toast.success("Your stock has been sold ✅");
-    } catch (error) {
-      console.error(error);
-      toast.error("No matching order found");
-    }
-  };
-
-  return (
-    <span className="actions">
-      <Tooltip title="Buy (B)" placement="top" arrow TransitionComponent={Grow}>
-        <button className="buy" onClick={handleBuyClick}>
-          Buy
-        </button>
-      </Tooltip>
-
-      <Tooltip title="Sell (S)" placement="top" arrow TransitionComponent={Grow}>
-        <button className="sell" onClick={handleSellClick}>
-          Sell
-        </button>
-      </Tooltip>
-
-      <Tooltip title="Analytics (A)" placement="top" arrow TransitionComponent={Grow}>
-        <button className="action">
-          <BarChartOutlined className="icon" />
-        </button>
-      </Tooltip>
-
-      <Tooltip title="More" placement="top" arrow TransitionComponent={Grow}>
-        <button className="action">
-          <MoreHoriz className="icon" />
-        </button>
-      </Tooltip>
-    </span>
+            <Tooltip
+              title="More"
+              placement="top"
+              arrow
+              TransitionComponent={Grow}
+            >
+              <button className="action">
+                <MoreHoriz className="icon" />
+              </button>
+            </Tooltip>
+          </span>
+        )}
+      </li>
+      {showPopup && <AddOrder name={stock.name} onClose={() => setShowPopup(false)} />}
+    </>
   );
 };

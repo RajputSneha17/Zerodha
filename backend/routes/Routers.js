@@ -1,5 +1,5 @@
 import express from "express";
-import {holdingController, homeController, orderController, orderHandler, positionController, updateModeHandler, watchlistController} from "../controllers/controllers.js"
+import {holdingController, homeController, orderController, orderHandler, positionController, updateModeHandler, watchlistController, deleteHandle} from "../controllers/controllers.js"
 const Router = express.Router();
 
 Router.get("/", homeController);
@@ -11,5 +11,6 @@ Router.get("/newOrder", orderHandler);
 Router.post("/newOrder", orderController);
 
 Router.patch("/updateMode", updateModeHandler)
+Router.delete("/deleteOrder", deleteHandle);
 
 export default Router;

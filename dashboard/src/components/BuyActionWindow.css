@@ -1,4 +1,4 @@
-.container {
+/* .container {
   --radius: 4px;
   width: 40%;
   height: 63%;
@@ -181,7 +181,7 @@
   background: #4184f3;
 }
 
-/* sudo selectors */
+
 .tab button::after {
   content: "";
   width: 100%;
@@ -217,4 +217,4 @@
 .btn-grey:hover {
   background: #9b9b9b;
   color: #fff;
-}
+} */

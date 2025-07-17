@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Signup1 = () => {
+  const [number, SetNumber] = useState("");
+  console.log(number);
   return (
     <div>
       <div className="container">
@@ -24,6 +26,7 @@ const Signup1 = () => {
             <h1>Signup now</h1>
             <p className="p-2">Or track your existing application</p>
 
+            <form action="">
             <div
               className="input-group custom-input-group w-100"
               style={{ maxWidth: "400px" }}
@@ -40,15 +43,17 @@ const Signup1 = () => {
                 type="number"
                 className="form-control ps-4 py-3"
                 placeholder="Enter your mobile number"
+                onChange={(e) => SetNumber(Number(e.target.value))}
               />
-            </div>
 
-            <button
+            </div>
+            <button type="submit"
               className="mt-4 btn btn-primary btn-lg"
               style={{ width: "250px" }}
             >
               Get OTP
             </button>
+            </form>
 
             <p className="fs-6 pt-2">
               By proceeding, you agree to the Zerodha <a href="#">terms</a> &{" "}
