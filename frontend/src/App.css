@@ -13,3 +13,7 @@ body {
 a {
   text-decoration: none;
 }
+
+.profile-img{
+  border-radius: 50%;
+}

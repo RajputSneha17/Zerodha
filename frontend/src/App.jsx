@@ -9,6 +9,9 @@ import About from "./landing_page/About/About";
 import Notfound from "./landing_page/Notfound";
 import Navbar from "./landing_page/Navbar";
 import Footer from "./landing_page/Footer";
+import Otp from "./landing_page/Signup/Otp";
+import Form from "./landing_page/Signup/Form";
+import Profile from "./landing_page/Signup/Profile";
 function App() {
   return (
     <>
@@ -17,6 +20,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/form" element={<Form />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
           <Route path="/product" element={<Product />} />
           <Route path="/pricing" element={<Pricing />} />

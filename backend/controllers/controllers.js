@@ -2,6 +2,7 @@ import HoldingModel from "../models/HoldingModel.js";
 import PositionsModel from "../models/PositionsModel.js";
 import OrderModel from "../models/OrderModel.js";
 import watchlistModel from "../models/watchListModel.js";
+import userModel from "../models/userModel.js";
 
 export const homeController = (req, res) => {
   res.send("working");
@@ -76,3 +77,13 @@ export const deleteHandle = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+export const emailController = async(req, res) => {
+  
+}
+export const userController = async(req, res) => {
+
+}
+export const profileController = async(req, res) => {
+
+}

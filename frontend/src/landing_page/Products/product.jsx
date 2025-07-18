@@ -1,3 +1,4 @@
+import Openaccount from "../Openaccount";
 import Hero from "./Hero";
 import Leftimg from "./Leftimg";
 import Rightimg from "./Rightimg";
@@ -47,6 +48,7 @@ const Product = () => {
         img2="assets/appstoreBadge.svg"
       />
       <Universe />
+      <Openaccount/>
     </div>
   );
 };

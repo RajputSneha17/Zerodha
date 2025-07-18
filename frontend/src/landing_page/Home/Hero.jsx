@@ -1,4 +1,5 @@
 import "./Hero.css";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -16,9 +17,11 @@ const Hero = () => {
             Online platform to invest in stocks, derivatives, mutual funds,
             ETFs, bonds, and more.
           </p>
-          <button className="btn btn-primary btn-sm fs-6 mt-4 px-5 rounded-0">
-            Sign up for free
-          </button>
+          <Link to="/signup">
+            <button className="btn btn-primary btn-sm fs-6 mt-4 px-5 rounded-0">
+              Sign up for free
+            </button>
+          </Link>
         </div>
       </div>
     </div>

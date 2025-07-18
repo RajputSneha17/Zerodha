@@ -60,9 +60,7 @@ const Investment = () => {
         </div>
       </div>
 
-      <button className="btn btn-primary btn-lg mb-5 mt-5 px-4">
-        Explore Investments
-      </button>
+      
     </div>
   );
 };

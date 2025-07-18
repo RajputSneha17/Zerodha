@@ -67,9 +67,6 @@ const Universe = () => {
           return null;
         })}
       </div>
-      <button className="btn btn-primary fs-5 px-5 p-2">
-        Sign up for free
-      </button>
     </div>
   );
 };
