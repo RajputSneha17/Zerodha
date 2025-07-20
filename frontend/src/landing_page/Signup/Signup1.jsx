@@ -1,14 +1,53 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignInWithPhone = () => {
-  const [emailId, setEmailId] = useState("");
-  const [otp, setOtp] = useState("");
-  const [confirmationResult, setConfirmationResult] = useState(null);
-  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+
+  const sendOTP = async () => {
+    try {
+      await axios.post("http://localhost:8000/send-otp", { email });
+    } catch (err) {
+      alert(
+        "The email you entered seems incorrect. If you don't want to receive an OTP, you can skip. Otherwise, please try again."
+      );
+    }
+  };
+
+  const emailSender = async () => {
+  try {
+    const res = await axios.post("http://localhost:8000/email", {
+      email: email,
+    });
+
+    const token = res.data.token;
+    localStorage.setItem("signup_token", token);
+
+    await sendOTP();
+
+    navigate("/otp");
+
+  } catch (error) {
+    console.log(error);
+
+    if (error.response?.status === 409) {
+      alert("Email already exists ❌");
+    } else {
+      alert(
+        "The email you entered seems incorrect. If you don't want to receive an OTP, you can skip. Otherwise, please try again."
+      );
+    }
+  }
+};
+
 
   return (
     <div>
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="container">
         <div className="center">
           <h1 className="text-center pt-5 mt-5" style={{ fontSize: "45px" }}>
@@ -42,22 +81,21 @@ const SignInWithPhone = () => {
                 type="email"
                 className="form-control ps-4 py-3"
                 placeholder="Enter your Email id"
-                onChange={(e) => setEmailId(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <Link to="/otp">
-              <button
-                type="button"
-                className="mt-4 btn btn-primary btn-lg"
-                style={{ width: "250px" }}
-              >
-                Get OTP
-              </button>
-            </Link>
+            <button
+              type="button"
+              className="mt-4 btn btn-primary btn-lg"
+              style={{ width: "250px" }}
+              onClick={emailSender}
+            >
+              Get OTP
+            </button>
 
             <p className="fs-6 pt-2">
-              By proceeding, you agree to the Zerodha <a href="#">terms</a> &{" "}
-              <a href="#">privacy policy</a>
+              Already have an account? <Link to="/loginform">Click here</Link>
             </p>
           </div>
         </div>

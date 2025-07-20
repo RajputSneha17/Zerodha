@@ -1,10 +1,31 @@
 import React from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Summary = () => {
+  const fetchDashboardData = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get("http://localhost:5173/dashboard", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching dashboard:", error);
+  }
+};
+
+useEffect(() => {
+fetchDashboardData();
+}, []);
   return (
     <>
       <div className="username">
-        <h6>Hi, User!</h6>
+        <h6>Hi, </h6>
         <hr className="divider" />
       </div>
 

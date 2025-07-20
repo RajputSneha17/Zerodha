@@ -3,11 +3,13 @@ import express from "express";
 import Router from "./routes/Routers.js";
 import "dotenv/config";
 import mongoose from "mongoose";
+
 // import watchlistModel from "./models/watchListModel.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 const uri = process.env.MONGO_URL;
+app.use("/profile", express.static("uploads"));
 
 // app.get("/watchlist", async (req, res) => {
 //    const watchlist = [

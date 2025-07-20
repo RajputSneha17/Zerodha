@@ -1,38 +1,20 @@
-// Signup.jsx
-import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
-  const navigate = useNavigate();
+import React, { useState } from "react";
+
+const LoginForm = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
-  const createUser = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      await axios.post(
-        "http://localhost:8000/userDetail",
-        {
-          name: name,
-          password: password,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("signup_token")}`,
-          },
-        }
-      );
-      navigate("/profile");
-    } catch (error) {
-      console.log(error);
-    }
+    
+    console.log("Login attempt with:", name, password);
   };
 
   return (
     <div className="container mt-5" style={{ maxWidth: "500px" }}>
-      <h3 className="mb-4 text-center">Sign-Up Form</h3>
-      <form onSubmit={createUser}>
+      <h3 className="mb-4 text-center">Log-In Form</h3>
+      <form onSubmit={handleLogin}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
@@ -49,7 +31,7 @@ const Signup = () => {
 
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
-            Create Password
+            Password
           </label>
           <input
             type="text"
@@ -72,4 +54,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default LoginForm;

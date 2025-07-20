@@ -12,6 +12,7 @@ import Footer from "./landing_page/Footer";
 import Otp from "./landing_page/Signup/Otp";
 import Form from "./landing_page/Signup/Form";
 import Profile from "./landing_page/Signup/Profile";
+import LoginForm from "./landing_page/Signup/LoginForm";
 function App() {
   return (
     <>
@@ -22,6 +23,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp" element={<Otp />} />
           <Route path="/form" element={<Form />} />
+          <Route path="/loginform" element={<LoginForm />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
           <Route path="/product" element={<Product />} />
